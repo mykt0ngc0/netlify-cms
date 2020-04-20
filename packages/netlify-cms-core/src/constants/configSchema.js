@@ -171,6 +171,14 @@ const getConfigSchema = () => ({
             },
           },
           view_filters: viewFilters,
+          nested: {
+            oneOf: [
+              { type: 'boolean' },
+              {
+                type: 'string',
+              },
+            ],
+          },
         },
         required: ['name', 'label'],
         oneOf: [{ required: ['files'] }, { required: ['folder', 'fields'] }],
