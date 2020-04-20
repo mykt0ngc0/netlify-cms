@@ -326,6 +326,10 @@ export interface EntriesFilterFailurePayload {
   error: Error;
 }
 
+export interface EntriesPersistSuccessPayload extends EntryPayload {
+  entries: EntryObject[];
+}
+
 export interface EntriesAction extends Action<string> {
   payload:
     | EntryRequestPayload
