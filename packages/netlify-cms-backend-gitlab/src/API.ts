@@ -56,6 +56,7 @@ enum CommitAction {
 type CommitItem = {
   base64Content?: string;
   path: string;
+  oldPath?: string;
   action: CommitAction;
 };
 
@@ -67,6 +68,7 @@ interface CommitsParams {
   actions?: {
     action: string;
     file_path: string;
+    previous_path?: string;
     content?: string;
     encoding?: string;
   }[];
@@ -415,6 +417,8 @@ export default class API {
       action: item.action,
       // eslint-disable-next-line @typescript-eslint/camelcase
       file_path: item.path,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      ...(item.oldPath ? { previous_path: item.oldPath } : {}),
       ...(item.base64Content ? { content: item.base64Content, encoding: 'base64' } : {}),
     }));
 
@@ -469,6 +473,13 @@ export default class API {
         commitMessage: options.commitMessage,
       });
     }
+  }
+
+  moveFile(from: string, to: string, commitMessage: string) {
+    const items = [{ action: CommitAction.MOVE, path: to, oldPath: from }];
+    return this.uploadAndCommit(items, {
+      commitMessage,
+    });
   }
 
   deleteFile = (path: string, commitMessage: string) => {
