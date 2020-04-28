@@ -637,14 +637,15 @@ export default class API {
     const branch = branchFromContentKey(contentKey);
     const mergeRequest = await this.getBranchMergeRequest(branch);
     const diff = await this.getDifferences(mergeRequest.sha);
-    const nonBinaryFiles = sortBy(
-      diff.filter(d => !d.binary).map(d => ({ path: d.newPath || d.oldPath, newFile: d.newFile })),
-      (d: { path: string }) => d.path,
-    );
-    const { path, newFile: newFile } = nonBinaryFiles[0];
+    const nonBinaryFiles = diff
+      .filter(d => !d.binary)
+      .map(d => ({ path: d.newPath || d.oldPath, newFile: d.newFile }));
+
+    const sortedByPath = sortBy(nonBinaryFiles, f => f.path.length);
+    const { path, newFile: newFile } = sortedByPath[0];
     const mediaFiles = await Promise.all(
       diff
-        .filter(d => d.oldPath !== path)
+        .filter(d => d.binary)
         .map(async d => {
           const path = d.newPath;
           const id = await this.getFileId(path, branch);
@@ -752,7 +753,7 @@ export default class API {
       ]);
 
       // mark files for deletion
-      for (const diff of diffs) {
+      for (const diff of diffs.filter(d => d.binary)) {
         if (!items.some(item => item.path === diff.newPath)) {
           items.push({ action: CommitAction.DELETE, path: diff.newPath });
         }
