@@ -641,7 +641,6 @@ export default class API {
     const status = labelToStatus(label);
     const timestamp = mergeRequest.updated_at;
     return {
-      branch,
       collection,
       slug,
       status,
