@@ -558,6 +558,7 @@ export default class API {
           status: d.status,
           newFile: d.status === 'added',
           path,
+          binary: d.binary || /.svg$/.test(path),
         };
       });
     return diffs;
@@ -583,7 +584,7 @@ export default class API {
       // mark files for deletion
       const diffs = await this.getDifferences(branch);
       const toDelete: DeleteEntry[] = [];
-      for (const diff of diffs) {
+      for (const diff of diffs.filter(d => d.binary)) {
         if (!files.some(file => file.path === diff.path)) {
           toDelete.push({ path: diff.path, delete: true });
         }
