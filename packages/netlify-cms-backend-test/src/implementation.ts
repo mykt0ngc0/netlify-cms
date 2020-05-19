@@ -32,7 +32,7 @@ type UnpublishedRepoEntry = {
     status: string;
     content: string | AssetProxy;
   }[];
-  timestamp: string;
+  updatedAt: string;
 };
 
 declare global {
@@ -287,7 +287,7 @@ export default class TestBackend implements Implementation {
       collection,
       status,
       diffs,
-      timestamp: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
   }
 
