@@ -44,7 +44,7 @@ describe('markdownToSlate', () => {
 
 describe('htmlToSlate', () => {
   it('should preserve spaces in rich html (GitHub Issue 3727)', () => {
-    const html = `<strong>Bold Text</strong><span><span> </span>for lunch a live conversation over ZOOM with special guest<span> </span></span>`;
+    const html = `<strong>Bold Text</strong><span><span> </span>regular text<span> </span></span>`;
 
     const actual = htmlToSlate(html);
     expect(actual).toEqual({
@@ -56,7 +56,7 @@ describe('htmlToSlate', () => {
           type: 'paragraph',
           nodes: [
             { object: 'text', text: 'Bold Text', marks: [{ type: 'bold' }] },
-            { object: 'text', text: ' for lunch a live conversation over ZOOM with special guest' },
+            { object: 'text', text: ' regular text' },
           ],
         },
       ],

@@ -191,5 +191,8 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "resolutions": {
+    "rehype-minify-whitespace": "^4.0.0"
   }
 }
